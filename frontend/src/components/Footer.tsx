@@ -29,7 +29,7 @@ export function Footer() {
           </p>
         </div>
 
-        <div>
+        {/* <div>
           <p className="mb-3 text-sm font-semibold text-foreground">Care</p>
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li>
@@ -49,7 +49,7 @@ export function Footer() {
               </Link>
             </li>
           </ul>
-        </div>
+        </div> */}
 
         <div>
           <p className="mb-3 text-sm font-semibold text-foreground">Account</p>
