@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 110 45% 97%;
+    --foreground: 152 30% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 152 30% 14%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 152 30% 14%;
+    --primary: 152 60% 38%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 110 45% 92%;
+    --secondary-foreground: 152 45% 20%;
+    --muted: 110 35% 93%;
+    --muted-foreground: 152 15% 42%;
+    --accent: 84 55% 88%;
+    --accent-foreground: 152 45% 20%;
+    --destructive: 4 78% 58%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 120 30% 88%;
+    --input: 120 25% 87%;
+    --ring: 152 60% 38%;
+    --radius: 1.25rem;
+
+    --chart-1: #2a78d6;
+    --chart-2: #eb6834;
+    --chart-3: #1baf7a;
+    --chart-4: #eda100;
+    --chart-5: #e87ba4;
+    --chart-6: #008300;
+    --chart-grid: #e1e0d9;
+    --chart-axis: #c3c2b7;
+    --chart-muted: #898781;
+    --chart-surface: #ffffff;
+  }
+
+  .dark {
+    --background: 155 30% 8%;
+    --foreground: 100 30% 94%;
+    --card: 155 25% 11%;
+    --card-foreground: 100 30% 94%;
+    --popover: 155 25% 11%;
+    --popover-foreground: 100 30% 94%;
+    --primary: 152 55% 48%;
+    --primary-foreground: 155 30% 8%;
+    --secondary: 155 20% 16%;
+    --secondary-foreground: 100 30% 94%;
+    --muted: 155 20% 16%;
+    --muted-foreground: 120 12% 65%;
+    --accent: 152 30% 20%;
+    --accent-foreground: 100 30% 94%;
+    --destructive: 4 70% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 155 20% 18%;
+    --input: 155 20% 18%;
+    --ring: 152 55% 48%;
+
+    --chart-1: #3987e5;
+    --chart-2: #d95926;
+    --chart-3: #199e70;
+    --chart-4: #c98500;
+    --chart-5: #d55181;
+    --chart-6: #008300;
+    --chart-grid: #2c2c2a;
+    --chart-axis: #383835;
+    --chart-muted: #898781;
+    --chart-surface: #1a1a19;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-body;
+  }
+}
