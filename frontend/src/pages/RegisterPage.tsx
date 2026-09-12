@@ -1,13 +1,19 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { UserPlus } from 'lucide-react'
-import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
-import { toast } from 'sonner'
-import { z } from 'zod'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { UserPlus } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import { toast } from "sonner";
+import { z } from "zod";
 
-import { getErrorMessage } from '@/api/client'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { getErrorMessage } from "@/api/client";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -15,39 +21,44 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { AuthIllustration } from '@/components/AuthIllustration'
-import { PasswordInput } from '@/components/PasswordInput'
-import { useAuth } from '@/context/AuthContext'
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { AuthIllustration } from "@/components/AuthIllustration";
+import { PasswordInput } from "@/components/PasswordInput";
+import { useAuth } from "@/context/AuthContext";
 
 const registerSchema = z
   .object({
-    fullName: z.string().min(2, 'Enter your full name'),
-    email: z.string().email('Enter a valid email address'),
-    password: z.string().min(6, 'Password must be at least 6 characters'),
+    fullName: z.string().min(2, "Enter your full name"),
+    email: z.string().email("Enter a valid email address"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
-    path: ['confirmPassword'],
-  })
+    path: ["confirmPassword"],
+  });
 
-type RegisterValues = z.infer<typeof registerSchema>
+type RegisterValues = z.infer<typeof registerSchema>;
 
 export function RegisterPage() {
-  const { register } = useAuth()
+  const { register } = useAuth();
 
   const form = useForm<RegisterValues>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { fullName: '', email: '', password: '', confirmPassword: '' },
-  })
+    defaultValues: {
+      fullName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
 
   async function onSubmit(values: RegisterValues) {
     try {
-      await register(values.fullName, values.email, values.password)
+      await register(values.fullName, values.email, values.password);
     } catch (error) {
-      toast.error(getErrorMessage(error))
+      toast.error(getErrorMessage(error));
     }
   }
 
@@ -62,17 +73,25 @@ export function RegisterPage() {
             <span className="mb-2 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-md shadow-primary/30">
               <UserPlus className="h-6 w-6" />
             </span>
-            <CardTitle className="font-display text-2xl text-primary">Create an account</CardTitle>
+            <CardTitle className="font-display text-2xl text-primary">
+              Create an account
+            </CardTitle>
             <CardDescription>
-              Already have an account?{' '}
-              <Link to="/login" className="font-semibold text-primary underline-offset-4 hover:underline">
+              Already have an account?{" "}
+              <Link
+                to="/login"
+                className="font-semibold text-primary underline-offset-4 hover:underline"
+              >
                 Log in
               </Link>
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-4"
+              >
                 <FormField
                   control={form.control}
                   name="fullName"
@@ -80,7 +99,11 @@ export function RegisterPage() {
                     <FormItem>
                       <FormLabel>Full name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Jane Doe" className="rounded-xl" {...field} />
+                        <Input
+                          placeholder="Jane Doe"
+                          className="rounded-xl"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -94,7 +117,12 @@ export function RegisterPage() {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="you@example.com" className="rounded-xl" {...field} />
+                        <Input
+                          type="email"
+                          placeholder="you@example.com"
+                          className="rounded-xl"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -108,7 +136,11 @@ export function RegisterPage() {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <PasswordInput placeholder="••••••••" className="rounded-xl" {...field} />
+                        <PasswordInput
+                          placeholder="••••••••"
+                          className="rounded-xl"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -122,7 +154,11 @@ export function RegisterPage() {
                     <FormItem>
                       <FormLabel>Confirm password</FormLabel>
                       <FormControl>
-                        <PasswordInput placeholder="••••••••" className="rounded-xl" {...field} />
+                        <PasswordInput
+                          placeholder="••••••••"
+                          className="rounded-xl"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -134,7 +170,9 @@ export function RegisterPage() {
                   className="w-full rounded-full shadow-md shadow-primary/30"
                   disabled={form.formState.isSubmitting}
                 >
-                  {form.formState.isSubmitting ? 'Creating account...' : 'Create account'}
+                  {form.formState.isSubmitting
+                    ? "Creating account..."
+                    : "Create account"}
                 </Button>
               </form>
             </Form>
@@ -143,9 +181,9 @@ export function RegisterPage() {
       </div>
 
       <AuthIllustration
-        title="Join Card Market"
-        description="Create a free account to list your own cards and start collecting."
+        title="Join Visionary Clinic"
+        description="Create a free account to find doctors and book appointments in minutes."
       />
     </div>
-  )
+  );
 }

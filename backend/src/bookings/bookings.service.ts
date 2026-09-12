@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { DayOfWeek, Prisma, Provider } from '@prisma/client';
 import { toPlainDecimals } from '../common/decimal.util';
+import { DoctorsService } from '../doctors/doctors.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 
@@ -35,7 +36,10 @@ const BOOKING_INCLUDE = {
 
 @Injectable()
 export class BookingsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly doctorsService: DoctorsService,
+  ) {}
 
   async create(userId: number, dto: CreateBookingDto) {
     const doctor = await this.prisma.doctor.findUnique({
@@ -162,6 +166,31 @@ export class BookingsService {
       include: BOOKING_INCLUDE,
     });
     return toPlainDecimals(cancelled);
+  }
+
+  async findAssignedToDoctor(userId: number) {
+    const doctorId = await this.doctorsService.getMyDoctorId(userId);
+    const bookings = await this.prisma.booking.findMany({
+      where: { doctorId },
+      include: BOOKING_INCLUDE,
+      orderBy: { appointmentDate: 'asc' },
+    });
+    return toPlainDecimals(bookings);
+  }
+
+  async findAssignedOneToDoctor(userId: number, id: number) {
+    const doctorId = await this.doctorsService.getMyDoctorId(userId);
+    const booking = await this.prisma.booking.findUnique({
+      where: { id },
+      include: BOOKING_INCLUDE,
+    });
+    if (!booking) {
+      throw new NotFoundException(`Booking ${id} not found`);
+    }
+    if (booking.doctorId !== doctorId) {
+      throw new ForbiddenException();
+    }
+    return toPlainDecimals(booking);
   }
 
   private computeInsuranceDiscount(

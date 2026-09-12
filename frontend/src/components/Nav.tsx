@@ -4,6 +4,7 @@ import {
   ChevronDown,
   LogOut,
   Menu,
+  Stethoscope,
   User as UserIcon,
 } from "lucide-react";
 
@@ -29,19 +30,7 @@ import { useAuth } from "@/context/AuthContext";
 
 const LOGO_MARK = (
   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-md shadow-primary/30">
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      className="h-4 w-4"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect x="3" y="5" width="18" height="14" rx="3" />
-      <path d="M3 10h18" />
-      <path d="M7 15h4" />
-    </svg>
+    <Stethoscope className="h-4 w-4" />
   </span>
 );
 
@@ -69,7 +58,7 @@ export function Nav() {
               <div className="flex h-16 items-center gap-2 border-b border-primary/10 px-6">
                 {LOGO_MARK}
                 <SheetTitle className="font-display text-lg font-bold text-primary">
-                  Card Market
+                  Visionary Clinic
                 </SheetTitle>
               </div>
               <nav className="flex flex-col gap-1 p-4 text-sm font-semibold text-muted-foreground">
@@ -105,7 +94,7 @@ export function Nav() {
             className="flex items-center gap-2 font-display text-lg font-bold text-primary"
           >
             {LOGO_MARK}
-            Card Market
+            VISIONARY Clinic
           </Link>
         </div>
 

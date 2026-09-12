@@ -1,50 +1,91 @@
-import { Button } from '@/components/ui/button'
+import { CalendarCheck, CreditCard, Search, Stethoscope } from "lucide-react";
+import { Link } from "react-router-dom";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { useAuth } from "@/context/AuthContext";
+
+const STEPS = [
+  {
+    icon: Search,
+    title: "Find a doctor",
+    description:
+      "Search by name, specialization, or department to find the right doctor for you.",
+  },
+  {
+    icon: CalendarCheck,
+    title: "Book an appointment",
+    description:
+      "Pick an open slot and share your details - no phone calls or waiting rooms.",
+  },
+  {
+    icon: CreditCard,
+    title: "Pay online",
+    description:
+      "Settle consultation fees securely, with insurance discounts applied automatically.",
+  },
+];
 
 export function HomePage() {
+  const { isAuthenticated } = useAuth();
+
   return (
-    <div className="mx-auto flex max-w-6xl justify-center py-4">
-      <div className="relative flex w-full max-w-2xl flex-col justify-center overflow-hidden">
-        <div className="relative rounded-3xl shadow-xl shadow-primary/10">
-          <div className="p-8">
-            <div className="text-center">
-              <h1 className="font-display text-4xl font-extrabold tracking-tight text-gray-900 dark:text-slate-200 sm:text-5xl md:text-6xl">
-                <span className="block">Create amazing</span>
-                <span className="bg-gradient-to-r from-indigo-400 to-pink-600 bg-clip-text text-transparent">
-                  podcast show notes
-                </span>
-              </h1>
-              <div className="mt-4 text-2xl font-bold text-gray-900 dark:text-slate-200">
-                10X faster
-                <span className="relative ml-2 whitespace-nowrap text-blue-600">
-                  <svg
-                    aria-hidden="true"
-                    viewBox="0 0 418 42"
-                    className="absolute top-3/4 left-0 right-0 m-auto h-[0.58em] w-fit fill-pink-400/50"
-                    preserveAspectRatio="none"
-                  >
-                    <path
-                      d="M203.371.916c-26.013-2.078-76.686 1.963-124.73 9.946L67.3 12.749C35.421 18.062 18.2 21.766 6.004 25.934 1.244 27.561.828 27.778.874 28.61c.07 1.214.828 1.121 9.595-1.176 9.072-2.377 17.15-3.92 39.246-7.496C123.565 7.986 157.869 4.492 195.942 5.046c7.461.108 19.25 1.696 19.17 2.582-.107 1.183-7.874 4.31-25.75 10.366-21.992 7.45-35.43 12.534-36.701 13.884-2.173 2.308-.202 4.407 4.442 4.734 2.654.187 3.263.157 15.593-.78 35.401-2.686 57.944-3.488 88.365-3.143 46.327.526 75.721 2.23 130.788 7.584 19.787 1.924 20.814 1.98 24.557 1.332l.066-.011c1.201-.203 1.53-1.825.399-2.335-2.911-1.31-4.893-1.604-22.048-3.261-57.509-5.556-87.871-7.36-132.059-7.842-23.239-.254-33.617-.116-50.627.674-11.629.54-42.371 2.494-46.696 2.967-2.359.259 8.133-3.625 26.504-9.81 23.239-7.825 27.934-10.149 28.304-14.005.417-4.348-3.529-6-16.878-7.066Z"
-                    />
-                  </svg>
-                  <span className="relative">with AI tools.</span>
-                </span>
-              </div>
-              <p className="mx-auto mt-4 max-w-xl text-lg text-gray-500 dark:text-slate-400">
-                Example is the AI Content Generator that helps you and your team break through creative blocks to create
-                amazing, original content 10X faster.
-              </p>
-              <div className="mt-8 flex justify-center">
-                <Button
-                  size="lg"
-                  className="rounded-full shadow-md shadow-primary/30"
-                >
-                  Get started for free 🚀
-                </Button>
-              </div>
-            </div>
+    <div className="mx-auto flex max-w-5xl flex-col gap-16 py-4">
+      <div className="relative overflow-hidden rounded-3xl shadow-xl shadow-primary/10">
+        <div className="pointer-events-none absolute -left-16 -top-16 h-56 w-56 rounded-full bg-primary/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 -right-10 h-64 w-64 rounded-full bg-accent blur-3xl" />
+
+        <div className="relative p-8 text-center sm:p-14">
+          <span className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-md shadow-primary/30">
+            <Stethoscope className="h-7 w-7" />
+          </span>
+          <h1 className="font-display text-4xl font-extrabold tracking-tight text-gray-900 dark:text-slate-200 sm:text-5xl">
+            <span className="block">Healthcare, booked</span>
+            <span className="bg-gradient-to-r from-indigo-400 to-pink-600 bg-clip-text text-transparent">
+              on your schedule
+            </span>
+          </h1>
+          <p className="mx-auto mt-4 max-w-xl text-lg text-gray-500 dark:text-slate-400">
+            Visionary Clinic makes it easy to search doctors, book appointments,
+            and pay consultation fees online - all in one place.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Button
+              asChild
+              size="lg"
+              className="rounded-full shadow-md shadow-primary/30"
+            >
+              <Link to="/doctors">Find a doctor</Link>
+            </Button>
+            {!isAuthenticated && (
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="rounded-full"
+              >
+                <Link to="/register">Create an account</Link>
+              </Button>
+            )}
           </div>
         </div>
       </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        {STEPS.map((step) => (
+          <Card key={step.title} className="rounded-2xl">
+            <CardContent className="flex flex-col items-center gap-3 p-6 text-center">
+              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                <step.icon className="h-5 w-5" />
+              </span>
+              <p className="font-semibold">{step.title}</p>
+              <p className="text-sm text-muted-foreground">
+                {step.description}
+              </p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
-  )
+  );
 }
