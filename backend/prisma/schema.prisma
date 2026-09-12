@@ -3,25 +3,368 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum UserRole {
+  PATIENT
+  DOCTOR
+  ADMIN
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum AttendanceStatus {
+  CHECKED_IN
+  COMPLETED
+  ABSENT
+}
+
+enum PaymentType {
+  CASH
+  CARD
+  KBZ_PAY
+  WAVE_MONEY
+  BANK_TRANSFER
+  INSURANCE
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum AgreementType {
+  PERCENTAGE
+  FIXED
+  CUSTOM
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+// ============================================================
+// USER
+// ============================================================
+
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  fullName  String
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  password String
+  fullName String
+  role     UserRole @default(PATIENT)
+
   bio       String?
   phone     String?
   address   String?
   avatarUrl String?
+
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  cards     Card[]
-  cartItems CartItem[]
-
-  @@map("users")
+  // Relations
+  doctor          Doctor?
+  bookings        Booking[]
+  createdExpenses Expense[]
 }
 
+// ============================================================
+// DOCTOR
+// ============================================================
 
+model Doctor {
+  id                   Int     @id @default(autoincrement())
+  userId               Int     @unique
+  specialization       String
+  medicalLicenseNumber String  @unique
+  hospitalDepartment   String?
+  image                String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user          User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  schedules     DoctorSchedule[]
+  bookings      Booking[]
+  consultations Consultation[]
+}
+
+// ============================================================
+// DOCTOR SCHEDULE
+// ============================================================
+
+model DoctorSchedule {
+  id                    Int       @id @default(autoincrement())
+  doctorId              Int
+  dayOfWeek             DayOfWeek
+  startTime             String
+  endTime               String
+  maximumPatientSession Int       @default(10)
+  consultationFees      Decimal   @db.Decimal(12, 2)
+
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  doctor Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+
+  @@index([doctorId])
+  @@index([dayOfWeek])
+}
+
+// ============================================================
+// INSURANCE / PROVIDER
+// ============================================================
+
+model Provider {
+  id                 Int           @id @default(autoincrement())
+  name               String        @unique
+  coveragePercentage Decimal       @db.Decimal(5, 2)
+  agreementType      AgreementType
+  rule               String?
+
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  bookings Booking[]
+}
+
+// ============================================================
+// BOOKING
+// ============================================================
+
+model Booking {
+  id Int @id @default(autoincrement())
+
+  // Patient
+  userId Int
+
+  // Doctor
+  doctorId Int
+
+  // Insurance provider - optional
+  providerId Int?
+
+  // Snapshot of patient information at booking time
+  fullName      String
+  dob           DateTime
+  gender        Gender
+  contactNumber String
+  nrc           String
+  medicalNotes  String?
+
+  // Payment summary
+  paymentType   PaymentType
+  depositAmount Decimal     @default(0) @db.Decimal(12, 2)
+  leftAmount    Decimal     @default(0) @db.Decimal(12, 2)
+
+  consultationFee   Decimal @default(0) @db.Decimal(12, 2)
+  insuranceDiscount Decimal @default(0) @db.Decimal(12, 2)
+
+  status BookingStatus @default(PENDING)
+
+  appointmentDate DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user     User      @relation(fields: [userId], references: [id], onDelete: Restrict)
+  doctor   Doctor    @relation(fields: [doctorId], references: [id], onDelete: Restrict)
+  provider Provider? @relation(fields: [providerId], references: [id], onDelete: SetNull)
+
+  dailySchedule DailySchedule?
+  consultation  Consultation?
+  payments      Payment[]
+
+  @@index([userId])
+  @@index([doctorId])
+  @@index([providerId])
+  @@index([appointmentDate])
+  @@index([status])
+}
+
+// ============================================================
+// DAILY SCHEDULE / PATIENT ATTENDANCE
+// ============================================================
+
+model DailySchedule {
+  id Int @id @default(autoincrement())
+
+  bookingId Int @unique
+
+  scheduleDate DateTime
+
+  status AttendanceStatus @default(ABSENT)
+
+  // Unique token generated during check-in
+  token String? @unique
+
+  checkInAt   DateTime?
+  completedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([scheduleDate])
+  @@index([status])
+}
+
+// ============================================================
+// CONSULTATION
+// ============================================================
+
+model Consultation {
+  id Int @id @default(autoincrement())
+
+  bookingId Int @unique
+  doctorId  Int
+
+  consultationNotes String?
+  diagnosisDetails  String?
+  prescription      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  doctor  Doctor  @relation(fields: [doctorId], references: [id], onDelete: Restrict)
+
+  @@index([doctorId])
+}
+
+// ============================================================
+// PAYMENT
+// ============================================================
+
+model Payment {
+  id Int @id @default(autoincrement())
+
+  bookingId Int
+
+  amount Decimal @db.Decimal(12, 2)
+
+  paymentType   PaymentType
+  paymentStatus PaymentStatus @default(PENDING)
+
+  transactionReference String?
+
+  paidAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+  @@index([paymentStatus])
+  @@index([paidAt])
+}
+
+// ============================================================
+// EXPENSE CATEGORY
+// ============================================================
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  description String?
+  isActive    Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  expenses Expense[]
+}
+
+// ============================================================
+// EXPENSE
+// ============================================================
+
+model Expense {
+  id Int @id @default(autoincrement())
+
+  categoryId  Int
+  createdById Int?
+
+  amount      Decimal  @db.Decimal(12, 2)
+  description String?
+  expenseDate DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  category  Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  createdBy User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([categoryId])
+  @@index([expenseDate])
+}
+
+// ============================================================
+// OPTIONAL: OPD REPORT
+// ============================================================
+//
+// Financial reports can actually be calculated dynamically
+// from Payment + Expense data.
+//
+// This table is useful if you want to save/freeze generated
+// monthly reports.
+//
+
+model OPDProfitLossReport {
+  id Int @id @default(autoincrement())
+
+  reportDateFrom DateTime
+  reportDateTo   DateTime
+
+  totalOPDRevenue        Decimal @default(0) @db.Decimal(12, 2)
+  totalConsultationFees  Decimal @default(0) @db.Decimal(12, 2)
+  totalInsuranceDiscount Decimal @default(0) @db.Decimal(12, 2)
+  totalExpenses          Decimal @default(0) @db.Decimal(12, 2)
+  netProfit              Decimal @default(0) @db.Decimal(12, 2)
+
+  createdAt DateTime @default(now())
+
+  @@index([reportDateFrom])
+  @@index([reportDateTo])
+}
