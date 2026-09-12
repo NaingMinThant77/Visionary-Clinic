@@ -80,13 +80,20 @@ export function Nav() {
                 >
                   Home
                 </Link>
+                <Link
+                  to="/doctors"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="rounded-xl px-4 py-2.5 transition-colors hover:bg-accent hover:text-accent-foreground"
+                >
+                  Find Doctors
+                </Link>
                 {isAuthenticated && (
                   <Link
-                    to="/cards/new"
+                    to="/bookings"
                     onClick={() => setMobileMenuOpen(false)}
                     className="rounded-xl px-4 py-2.5 transition-colors hover:bg-accent hover:text-accent-foreground"
                   >
-                    Tab 1
+                    My Appointments
                   </Link>
                 )}
               </nav>
@@ -109,12 +116,18 @@ export function Nav() {
           >
             Home
           </Link>
+          <Link
+            to="/doctors"
+            className="rounded-full px-4 py-2 transition-colors hover:bg-accent hover:text-accent-foreground"
+          >
+            Find Doctors
+          </Link>
           {isAuthenticated && (
             <Link
-              to="/cards/new"
+              to="/bookings"
               className="rounded-full px-4 py-2 transition-colors hover:bg-accent hover:text-accent-foreground"
             >
-              Tab 1
+              My Appointments
             </Link>
           )}
         </nav>

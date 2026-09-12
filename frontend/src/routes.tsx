@@ -2,6 +2,10 @@ import { createBrowserRouter } from 'react-router-dom'
 
 import { Layout } from '@/components/Layout'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
+import { BookingDetailPage } from '@/pages/BookingDetailPage'
+import { BookingsPage } from '@/pages/BookingsPage'
+import { DoctorDetailPage } from '@/pages/DoctorDetailPage'
+import { DoctorsPage } from '@/pages/DoctorsPage'
 import { LoginPage } from '@/pages/LoginPage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
 import { ProfilePage } from '@/pages/ProfilePage'
@@ -17,6 +21,24 @@ export const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'register', element: <RegisterPage /> },
+      { path: 'doctors', element: <DoctorsPage /> },
+      { path: 'doctors/:id', element: <DoctorDetailPage /> },
+      {
+        path: 'bookings',
+        element: (
+          <ProtectedRoute>
+            <BookingsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'bookings/:id',
+        element: (
+          <ProtectedRoute>
+            <BookingDetailPage />
+          </ProtectedRoute>
+        ),
+      },
       {
         path: 'cards/new',
         element: (
