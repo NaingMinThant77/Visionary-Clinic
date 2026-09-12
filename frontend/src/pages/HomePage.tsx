@@ -5,29 +5,75 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/context/AuthContext";
 
-const STEPS = [
+const PATIENT_STEPS = [
   {
     icon: Search,
     title: "Find a doctor",
     description:
       "Search by name, specialization, or department to find the right doctor for you.",
+    url: "/doctors",
   },
   {
     icon: CalendarCheck,
     title: "Book an appointment",
     description:
       "Pick an open slot and share your details - no phone calls or waiting rooms.",
+    url: "/bookings",
   },
   {
     icon: CreditCard,
     title: "Pay online",
     description:
       "Settle consultation fees securely, with insurance discounts applied automatically.",
+    url: "/bookings",
+  },
+];
+
+const DOCTOR_STEPS = [
+  {
+    icon: CalendarCheck,
+    title: "My schedule",
+    description: "Manage the weekly slots patients can book with you.",
+    url: "/doctor/schedule",
+  },
+  {
+    icon: Search,
+    title: "Consultations",
+    description:
+      "View patients booked into your schedule and record consultation notes.",
+    url: "/doctor/consultations",
+  },
+];
+
+const ADMIN_STEPS = [
+  {
+    icon: Search,
+    title: "Doctors",
+    description: "Configure doctor profiles and manage their availability.",
+    url: "/admin/doctors",
+  },
+  {
+    icon: CalendarCheck,
+    title: "Daily bookings",
+    description: "Oversee appointments and patient check-ins for the day.",
+    url: "/admin/bookings",
+  },
+  {
+    icon: CreditCard,
+    title: "Financial reports",
+    description: "Track OPD revenue, expenses, and net profit.",
+    url: "/admin/reports",
   },
 ];
 
 export function HomePage() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  const steps =
+    user?.role === "ADMIN"
+      ? ADMIN_STEPS
+      : user?.role === "DOCTOR"
+        ? DOCTOR_STEPS
+        : PATIENT_STEPS;
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-16 py-4">
@@ -72,18 +118,20 @@ export function HomePage() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {STEPS.map((step) => (
-          <Card key={step.title} className="rounded-2xl">
-            <CardContent className="flex flex-col items-center gap-3 p-6 text-center">
-              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                <step.icon className="h-5 w-5" />
-              </span>
-              <p className="font-semibold">{step.title}</p>
-              <p className="text-sm text-muted-foreground">
-                {step.description}
-              </p>
-            </CardContent>
-          </Card>
+        {steps.map((step) => (
+          <Link key={step.title} to={step.url}>
+            <Card className="h-full rounded-2xl transition-shadow hover:shadow-md">
+              <CardContent className="flex flex-col items-center gap-3 p-6 text-center">
+                <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                  <step.icon className="h-5 w-5" />
+                </span>
+                <p className="font-semibold">{step.title}</p>
+                <p className="text-sm text-muted-foreground">
+                  {step.description}
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
     </div>

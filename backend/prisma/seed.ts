@@ -7,6 +7,8 @@ const prisma = new PrismaClient();
 const DEMO_PATIENT_EMAIL = 'patient@example.com';
 const DEMO_PATIENT_PASSWORD = 'password123';
 const DEMO_DOCTOR_PASSWORD = 'password123';
+const DEMO_ADMIN_EMAIL = 'admin@example.com';
+const DEMO_ADMIN_PASSWORD = 'password123';
 
 const DOCTORS = [
   {
@@ -142,6 +144,24 @@ async function main() {
     });
     console.log(
       `Seeded demo patient: ${DEMO_PATIENT_EMAIL} / ${DEMO_PATIENT_PASSWORD}`,
+    );
+  }
+
+  const admin = await prisma.user.findUnique({
+    where: { email: DEMO_ADMIN_EMAIL },
+  });
+  if (!admin) {
+    const password = await bcrypt.hash(DEMO_ADMIN_PASSWORD, SALT_ROUNDS);
+    await prisma.user.create({
+      data: {
+        email: DEMO_ADMIN_EMAIL,
+        password,
+        fullName: 'Clinic Admin',
+        role: 'ADMIN',
+      },
+    });
+    console.log(
+      `Seeded demo admin: ${DEMO_ADMIN_EMAIL} / ${DEMO_ADMIN_PASSWORD}`,
     );
   }
 

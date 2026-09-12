@@ -34,6 +34,8 @@ const BOOKING_INCLUDE = {
   },
   provider: true,
   payments: { orderBy: { createdAt: 'desc' } },
+  consultation: true,
+  dailySchedule: true,
 } satisfies Prisma.BookingInclude;
 
 @Injectable()

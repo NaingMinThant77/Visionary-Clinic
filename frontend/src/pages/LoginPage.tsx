@@ -55,7 +55,7 @@ export function LoginPage() {
         title="Welcome to Visionary Clinic"
         description="Find doctors, book appointments, and manage your visits in one place."
       /> */}
-      <img src="login.png" alt="login" />
+      <img src="Login.png" alt="login" />
 
       <div className="relative flex flex-col justify-center overflow-hidden">
         <div className="pointer-events-none absolute -left-16 -top-10 h-48 w-48 rounded-full bg-primary/20 blur-3xl" />

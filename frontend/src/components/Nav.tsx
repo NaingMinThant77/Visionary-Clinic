@@ -34,9 +34,19 @@ const LOGO_MARK = (
   </span>
 );
 
+const ADMIN_LINKS = [
+  { to: "/admin/doctors", label: "Doctors" },
+  { to: "/admin/bookings", label: "Bookings" },
+  { to: "/admin/providers", label: "Providers" },
+  { to: "/admin/categories", label: "Categories" },
+  { to: "/admin/expenses", label: "Expenses" },
+  { to: "/admin/reports", label: "Reports" },
+];
+
 export function Nav() {
   const { user, isAuthenticated, logout } = useAuth();
   const isDoctor = user?.role === "DOCTOR";
+  const isAdmin = user?.role === "ADMIN";
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -70,7 +80,20 @@ export function Nav() {
                 >
                   Home
                 </Link>
-                {isDoctor ? (
+                {isAdmin ? (
+                  <>
+                    {ADMIN_LINKS.map((link) => (
+                      <Link
+                        key={link.to}
+                        to={link.to}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="rounded-xl px-4 py-2.5 transition-colors hover:bg-accent hover:text-accent-foreground"
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </>
+                ) : isDoctor ? (
                   <>
                     <Link
                       to="/doctor/schedule"
@@ -127,7 +150,19 @@ export function Nav() {
           >
             Home
           </Link>
-          {isDoctor ? (
+          {isAdmin ? (
+            <>
+              {ADMIN_LINKS.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className="rounded-full px-4 py-2 transition-colors hover:bg-accent hover:text-accent-foreground"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </>
+          ) : isDoctor ? (
             <>
               <Link
                 to="/doctor/schedule"

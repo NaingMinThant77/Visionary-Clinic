@@ -18,7 +18,6 @@ export async function getMySchedules() {
   const { data } = await apiClient.get<DoctorSchedule[]>(
     "/doctors/me/schedules",
   );
-  console.log("data in my schedule", data);
   return data;
 }
 

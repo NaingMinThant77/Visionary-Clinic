@@ -129,6 +129,27 @@ export interface Payment {
   createdAt: string
 }
 
+export type AttendanceStatus = 'CHECKED_IN' | 'COMPLETED' | 'ABSENT'
+
+export interface DailySchedule {
+  id: number
+  bookingId: number
+  scheduleDate: string
+  status: AttendanceStatus
+  token: string | null
+  checkInAt: string | null
+  completedAt: string | null
+}
+
+export interface Consultation {
+  id: number
+  bookingId: number
+  doctorId: number
+  consultationNotes: string | null
+  diagnosisDetails: string | null
+  prescription: string | null
+}
+
 export interface Booking {
   id: number
   userId: number
@@ -157,4 +178,33 @@ export interface Booking {
   }
   provider: Provider | null
   payments: Payment[]
+  consultation?: Consultation | null
+  dailySchedule?: DailySchedule | null
+}
+
+export interface Category {
+  id: number
+  name: string
+  description: string | null
+  isActive: boolean
+}
+
+export interface Expense {
+  id: number
+  categoryId: number
+  createdById: number | null
+  amount: number
+  description: string | null
+  expenseDate: string
+  category: Category
+}
+
+export interface OpdReport {
+  reportDateFrom: string
+  reportDateTo: string
+  totalOPDRevenue: number
+  totalConsultationFees: number
+  totalInsuranceDiscount: number
+  totalExpenses: number
+  netProfit: number
 }
