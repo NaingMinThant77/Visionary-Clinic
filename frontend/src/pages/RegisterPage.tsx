@@ -23,7 +23,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { AuthIllustration } from "@/components/AuthIllustration";
 import { PasswordInput } from "@/components/PasswordInput";
 import { useAuth } from "@/context/AuthContext";
 
@@ -180,10 +179,7 @@ export function RegisterPage() {
         </Card>
       </div>
 
-      <AuthIllustration
-        title="Join Visionary Clinic"
-        description="Create a free account to find doctors and book appointments in minutes."
-      />
+      <img src="register.png" alt="login" />
     </div>
   );
 }

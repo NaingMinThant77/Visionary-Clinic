@@ -9,15 +9,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { EmptyState } from '@/components/EmptyState'
 import { ErrorState } from '@/components/ErrorState'
 import { Loading } from '@/components/Loading'
-import type { BookingStatus } from '@/types'
-import { formatCurrency, formatFullDate } from '@/lib/utils'
-
-const STATUS_VARIANT: Record<BookingStatus, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-  PENDING: 'outline',
-  CONFIRMED: 'default',
-  CANCELLED: 'destructive',
-  COMPLETED: 'secondary',
-}
+import { BOOKING_STATUS_VARIANT, formatCurrency, formatFullDate } from '@/lib/utils'
 
 export function BookingsPage() {
   const { data: bookings, error, isLoading, mutate } = useSWR('bookings/me', getMyBookings)
@@ -63,7 +55,7 @@ export function BookingsPage() {
                     </div>
                   </div>
                   <div className="flex shrink-0 flex-col items-end gap-1">
-                    <Badge variant={STATUS_VARIANT[booking.status]} className="rounded-full">
+                    <Badge variant={BOOKING_STATUS_VARIANT[booking.status]} className="rounded-full">
                       {booking.status}
                     </Badge>
                     {booking.leftAmount > 0 && booking.status !== 'CANCELLED' && (

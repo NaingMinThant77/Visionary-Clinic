@@ -23,7 +23,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { AuthIllustration } from "@/components/AuthIllustration";
 import { PasswordInput } from "@/components/PasswordInput";
 import { useAuth } from "@/context/AuthContext";
 
@@ -52,10 +51,11 @@ export function LoginPage() {
 
   return (
     <div className="mx-auto grid max-w-4xl grid-cols-1 items-center gap-8 py-8 md:grid-cols-2">
-      <AuthIllustration
-        title="Welcome to visionary Clinic"
+      {/* <AuthIllustration
+        title="Welcome to Visionary Clinic"
         description="Find doctors, book appointments, and manage your visits in one place."
-      />
+      /> */}
+      <img src="login.png" alt="login" />
 
       <div className="relative flex flex-col justify-center overflow-hidden">
         <div className="pointer-events-none absolute -left-16 -top-10 h-48 w-48 rounded-full bg-primary/20 blur-3xl" />

@@ -115,7 +115,7 @@ export function Footer() {
 
       <div className="relative flex flex-col items-center gap-1.5 border-t border-primary/10 py-5 text-center text-xs text-muted-foreground sm:flex-row sm:justify-between sm:px-4">
         <p>
-          © {new Date().getFullYear()} VISIONARY Clinic. All rights reserved.
+          © {new Date().getFullYear()} Visionary Clinic. All rights reserved.
         </p>
         <p className="flex items-center gap-1">
           Made with <Heart className="h-3 w-3 fill-primary text-primary" /> for

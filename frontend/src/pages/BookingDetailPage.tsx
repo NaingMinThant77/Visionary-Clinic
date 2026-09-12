@@ -32,25 +32,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import type { BookingStatus } from '@/types'
-import { formatCurrency, formatFullDate } from '@/lib/utils'
+import {
+  BOOKING_STATUS_VARIANT,
+  PAYMENT_TYPE_OPTIONS,
+  formatCurrency,
+  formatFullDate,
+} from '@/lib/utils'
 import { Stethoscope } from 'lucide-react'
-
-const STATUS_VARIANT: Record<BookingStatus, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-  PENDING: 'outline',
-  CONFIRMED: 'default',
-  CANCELLED: 'destructive',
-  COMPLETED: 'secondary',
-}
-
-const PAYMENT_TYPE_OPTIONS = [
-  { value: 'CASH', label: 'Cash' },
-  { value: 'CARD', label: 'Card' },
-  { value: 'KBZ_PAY', label: 'KBZ Pay' },
-  { value: 'WAVE_MONEY', label: 'Wave Money' },
-  { value: 'BANK_TRANSFER', label: 'Bank Transfer' },
-  { value: 'INSURANCE', label: 'Insurance' },
-] as const
 
 const paymentSchema = z.object({
   amount: z.number().positive('Enter an amount greater than zero'),
@@ -131,7 +119,7 @@ export function BookingDetailPage() {
               <p className="text-sm text-muted-foreground">{formatFullDate(booking.appointmentDate)}</p>
             </div>
           </div>
-          <Badge variant={STATUS_VARIANT[booking.status]} className="rounded-full">
+          <Badge variant={BOOKING_STATUS_VARIANT[booking.status]} className="rounded-full">
             {booking.status}
           </Badge>
         </CardContent>

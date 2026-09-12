@@ -1,11 +1,40 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
-import type { DayOfWeek } from '@/types'
+import type { BookingStatus, DayOfWeek } from '@/types'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
+
+export const DAY_LABELS: Record<DayOfWeek, string> = {
+  MONDAY: 'Monday',
+  TUESDAY: 'Tuesday',
+  WEDNESDAY: 'Wednesday',
+  THURSDAY: 'Thursday',
+  FRIDAY: 'Friday',
+  SATURDAY: 'Saturday',
+  SUNDAY: 'Sunday',
+}
+
+export const BOOKING_STATUS_VARIANT: Record<
+  BookingStatus,
+  'default' | 'secondary' | 'destructive' | 'outline'
+> = {
+  PENDING: 'outline',
+  CONFIRMED: 'default',
+  CANCELLED: 'destructive',
+  COMPLETED: 'secondary',
+}
+
+export const PAYMENT_TYPE_OPTIONS = [
+  { value: 'CASH', label: 'Cash' },
+  { value: 'CARD', label: 'Card' },
+  { value: 'KBZ_PAY', label: 'KBZ Pay' },
+  { value: 'WAVE_MONEY', label: 'Wave Money' },
+  { value: 'BANK_TRANSFER', label: 'Bank Transfer' },
+  { value: 'INSURANCE', label: 'Insurance' },
+] as const
 
 export function formatCurrency(amount: number): string {
   return `${amount.toLocaleString('en-US')} MMK`

@@ -1,7 +1,10 @@
+export type UserRole = 'PATIENT' | 'DOCTOR' | 'ADMIN'
+
 export interface User {
   id: number
   email: string
   fullName: string
+  role: UserRole
   bio: string | null
   phone: string | null
   address: string | null
@@ -99,6 +102,7 @@ export interface Doctor {
   user: {
     id: number
     fullName: string
+    email?: string
     avatarUrl: string | null
     bio: string | null
   }

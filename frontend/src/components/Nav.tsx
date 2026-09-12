@@ -36,6 +36,7 @@ const LOGO_MARK = (
 
 export function Nav() {
   const { user, isAuthenticated, logout } = useAuth();
+  const isDoctor = user?.role === "DOCTOR";
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -69,21 +70,42 @@ export function Nav() {
                 >
                   Home
                 </Link>
-                <Link
-                  to="/doctors"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="rounded-xl px-4 py-2.5 transition-colors hover:bg-accent hover:text-accent-foreground"
-                >
-                  Find Doctors
-                </Link>
-                {isAuthenticated && (
-                  <Link
-                    to="/bookings"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="rounded-xl px-4 py-2.5 transition-colors hover:bg-accent hover:text-accent-foreground"
-                  >
-                    My Appointments
-                  </Link>
+                {isDoctor ? (
+                  <>
+                    <Link
+                      to="/doctor/schedule"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="rounded-xl px-4 py-2.5 transition-colors hover:bg-accent hover:text-accent-foreground"
+                    >
+                      My Schedule
+                    </Link>
+                    <Link
+                      to="/doctor/consultations"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="rounded-xl px-4 py-2.5 transition-colors hover:bg-accent hover:text-accent-foreground"
+                    >
+                      Consultations
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to="/doctors"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="rounded-xl px-4 py-2.5 transition-colors hover:bg-accent hover:text-accent-foreground"
+                    >
+                      Find Doctors
+                    </Link>
+                    {isAuthenticated && (
+                      <Link
+                        to="/bookings"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="rounded-xl px-4 py-2.5 transition-colors hover:bg-accent hover:text-accent-foreground"
+                      >
+                        My Appointments
+                      </Link>
+                    )}
+                  </>
                 )}
               </nav>
             </SheetContent>
@@ -94,7 +116,7 @@ export function Nav() {
             className="flex items-center gap-2 font-display text-lg font-bold text-primary"
           >
             {LOGO_MARK}
-            VISIONARY Clinic
+            Visionary Clinic
           </Link>
         </div>
 
@@ -105,19 +127,38 @@ export function Nav() {
           >
             Home
           </Link>
-          <Link
-            to="/doctors"
-            className="rounded-full px-4 py-2 transition-colors hover:bg-accent hover:text-accent-foreground"
-          >
-            Find Doctors
-          </Link>
-          {isAuthenticated && (
-            <Link
-              to="/bookings"
-              className="rounded-full px-4 py-2 transition-colors hover:bg-accent hover:text-accent-foreground"
-            >
-              My Appointments
-            </Link>
+          {isDoctor ? (
+            <>
+              <Link
+                to="/doctor/schedule"
+                className="rounded-full px-4 py-2 transition-colors hover:bg-accent hover:text-accent-foreground"
+              >
+                My Schedule
+              </Link>
+              <Link
+                to="/doctor/consultations"
+                className="rounded-full px-4 py-2 transition-colors hover:bg-accent hover:text-accent-foreground"
+              >
+                Consultations
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/doctors"
+                className="rounded-full px-4 py-2 transition-colors hover:bg-accent hover:text-accent-foreground"
+              >
+                Find Doctors
+              </Link>
+              {isAuthenticated && (
+                <Link
+                  to="/bookings"
+                  className="rounded-full px-4 py-2 transition-colors hover:bg-accent hover:text-accent-foreground"
+                >
+                  My Appointments
+                </Link>
+              )}
+            </>
           )}
         </nav>
 
@@ -205,7 +246,7 @@ export function Nav() {
             open={logoutConfirmOpen}
             onOpenChange={setLogoutConfirmOpen}
             title="Log out?"
-            description="You'll need to log in again to browse your cart and manage your cards."
+            description="You'll need to log in again to book appointments or manage your visits."
             confirmLabel="Log out"
             onConfirm={logout}
           />

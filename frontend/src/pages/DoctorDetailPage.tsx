@@ -36,28 +36,15 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { useAuth } from '@/context/AuthContext'
-import { cn, formatCurrency, formatDateLabel, getUpcomingDates } from '@/lib/utils'
+import {
+  DAY_LABELS,
+  PAYMENT_TYPE_OPTIONS,
+  cn,
+  formatCurrency,
+  formatDateLabel,
+  getUpcomingDates,
+} from '@/lib/utils'
 import { useState } from 'react'
-import type { DayOfWeek } from '@/types'
-
-const DAY_LABELS: Record<DayOfWeek, string> = {
-  MONDAY: 'Monday',
-  TUESDAY: 'Tuesday',
-  WEDNESDAY: 'Wednesday',
-  THURSDAY: 'Thursday',
-  FRIDAY: 'Friday',
-  SATURDAY: 'Saturday',
-  SUNDAY: 'Sunday',
-}
-
-const PAYMENT_TYPE_OPTIONS = [
-  { value: 'CASH', label: 'Cash' },
-  { value: 'CARD', label: 'Card' },
-  { value: 'KBZ_PAY', label: 'KBZ Pay' },
-  { value: 'WAVE_MONEY', label: 'Wave Money' },
-  { value: 'BANK_TRANSFER', label: 'Bank Transfer' },
-  { value: 'INSURANCE', label: 'Insurance' },
-] as const
 
 const bookingSchema = z.object({
   fullName: z.string().min(2, "Enter the patient's full name"),

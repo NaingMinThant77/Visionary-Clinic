@@ -34,7 +34,12 @@ export class DoctorsService {
 
     const where: Prisma.DoctorWhereInput = {
       ...(query.specialization
-        ? { specialization: { equals: query.specialization, mode: 'insensitive' } }
+        ? {
+            specialization: {
+              equals: query.specialization,
+              mode: 'insensitive',
+            },
+          }
         : {}),
       ...(search
         ? {
@@ -73,7 +78,9 @@ export class DoctorsService {
       select: { id: true },
     });
     if (!doctor) {
-      throw new NotFoundException('No doctor profile is linked to this account');
+      throw new NotFoundException(
+        'No doctor profile is linked to this account',
+      );
     }
     return doctor.id;
   }
@@ -89,7 +96,13 @@ export class DoctorsService {
         hospitalDepartment: true,
         image: true,
         user: {
-          select: { id: true, fullName: true, email: true, avatarUrl: true, bio: true },
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+            avatarUrl: true,
+            bio: true,
+          },
         },
       },
     });
@@ -102,6 +115,7 @@ export class DoctorsService {
       where: { doctorId },
       orderBy: [{ dayOfWeek: 'asc' }, { startTime: 'asc' }],
     });
+    console.log('MySchedule: ', schedules);
     return toPlainDecimals(schedules);
   }
 
@@ -115,7 +129,11 @@ export class DoctorsService {
     return toPlainDecimals(schedule);
   }
 
-  async updateSchedule(userId: number, scheduleId: number, dto: UpdateScheduleDto) {
+  async updateSchedule(
+    userId: number,
+    scheduleId: number,
+    dto: UpdateScheduleDto,
+  ) {
     const doctorId = await this.getMyDoctorId(userId);
     const schedule = await this.getOwnedSchedule(doctorId, scheduleId);
 
