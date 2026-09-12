@@ -32,7 +32,7 @@ export function AdminReportsPage() {
       <div>
         <h1 className="text-2xl font-semibold">Financial report</h1>
         <p className="text-sm text-muted-foreground">
-          OPD revenue and expenses for a date range, computed from payments and logged expenses.
+          OPD revenue (patient payments + insurance claims) against expenses for a date range.
         </p>
       </div>
 
@@ -55,15 +55,15 @@ export function AdminReportsPage() {
         <Card className="rounded-2xl">
           <CardContent className="space-y-3 p-6 text-sm">
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Consultation fees billed</span>
-              <span>{formatCurrency(report.totalConsultationFees)}</span>
+              <span className="text-muted-foreground">Paid by patients</span>
+              <span>{formatCurrency(report.totalConsultationFees - report.totalInsuranceDiscount)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Insurance discounts given</span>
-              <span>- {formatCurrency(report.totalInsuranceDiscount)}</span>
+              <span className="text-muted-foreground">Insurance claims</span>
+              <span>{formatCurrency(report.totalInsuranceDiscount)}</span>
             </div>
             <div className="flex justify-between border-t pt-3">
-              <span className="font-medium">OPD revenue collected</span>
+              <span className="font-medium">Total OPD revenue</span>
               <span className="font-medium">{formatCurrency(report.totalOPDRevenue)}</span>
             </div>
             <div className="flex justify-between">

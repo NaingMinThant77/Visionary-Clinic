@@ -179,7 +179,7 @@ export function RegisterPage() {
         </Card>
       </div>
 
-      <img src="Register.png" alt="login" />
+      <img src="Register.jpg" alt="login" />
     </div>
   );
 }

@@ -96,13 +96,6 @@ export function HomePage() {
             and pay consultation fees online - all in one place.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Button
-              asChild
-              size="lg"
-              className="rounded-full shadow-md shadow-primary/30"
-            >
-              <Link to="/doctors">Find a doctor</Link>
-            </Button>
             {!isAuthenticated && (
               <Button
                 asChild

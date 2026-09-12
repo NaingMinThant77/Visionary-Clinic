@@ -195,9 +195,15 @@ function ExpenseFormDialog({
 
 export function AdminExpensesPage() {
   const { data: expenses, error, isLoading, mutate } = useSWR('admin-expenses', listExpenses)
+  const { data: categories } = useSWR('admin-categories', listCategories)
   const [formOpen, setFormOpen] = useState(false)
   const [editing, setEditing] = useState<Expense | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<Expense | null>(null)
+  const [categoryFilter, setCategoryFilter] = useState('all')
+
+  const filteredExpenses = expenses?.filter(
+    (expense) => categoryFilter === 'all' || expense.categoryId.toString() === categoryFilter
+  )
 
   function openCreate() {
     setEditing(null)
@@ -234,6 +240,22 @@ export function AdminExpensesPage() {
         </Button>
       </div>
 
+      {expenses && expenses.length > 0 && (
+        <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+          <SelectTrigger className="w-fit min-w-[10rem] rounded-xl">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All categories</SelectItem>
+            {categories?.map((category) => (
+              <SelectItem key={category.id} value={category.id.toString()}>
+                {category.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      )}
+
       {isLoading && <Loading label="Loading expenses..." />}
 
       {error && <ErrorState message="Couldn't load expenses." onRetry={() => mutate()} />}
@@ -250,9 +272,13 @@ export function AdminExpensesPage() {
         />
       )}
 
-      {!isLoading && !error && expenses && expenses.length > 0 && (
+      {!isLoading && !error && expenses && expenses.length > 0 && filteredExpenses?.length === 0 && (
+        <EmptyState title="No expenses in this category" description="Try a different category." />
+      )}
+
+      {!isLoading && !error && filteredExpenses && filteredExpenses.length > 0 && (
         <div className="space-y-3">
-          {expenses.map((expense) => (
+          {filteredExpenses.map((expense) => (
             <Card key={expense.id} className="rounded-2xl">
               <CardContent className="flex flex-wrap items-center justify-between gap-4 p-5">
                 <div>

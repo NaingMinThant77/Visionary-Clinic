@@ -113,7 +113,7 @@ export function ProfilePage() {
 
   async function onPasswordSubmit(values: PasswordValues) {
     try {
-      await changePassword(values)
+      await changePassword({ currentPassword: values.currentPassword, newPassword: values.newPassword })
       passwordForm.reset({ currentPassword: '', newPassword: '', confirmPassword: '' })
       toast.success('Password changed!')
     } catch (error) {

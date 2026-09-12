@@ -10,6 +10,7 @@ import {
 
 import { resolveAssetUrl } from "@/api/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -232,9 +233,16 @@ export function Nav() {
                     </AvatarFallback>
                   </Avatar>
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-foreground">
-                      {user?.fullName}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className="truncate text-sm font-semibold text-foreground">
+                        {user?.fullName}
+                      </p>
+                      {user && (
+                        <Badge variant="secondary" className="rounded-full px-2 py-0 text-[10px]">
+                          {user.role}
+                        </Badge>
+                      )}
+                    </div>
                     <p className="truncate text-xs font-normal text-muted-foreground">
                       {user?.email}
                     </p>
