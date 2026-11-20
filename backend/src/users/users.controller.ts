@@ -14,6 +14,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { uploadBufferToCloudinary } from '../common/cloudinary.util';
 import { imageUploadOptions } from '../common/multer.config';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { UpdateEmailDto } from './dto/update-email.dto';
@@ -59,7 +60,8 @@ export class UsersController {
     if (!file) {
       throw new BadRequestException('file is required');
     }
-    const avatarUrl = `/uploads/${file.filename}`;
+    // const avatarUrl = `/uploads/${file.filename}`;
+    const avatarUrl = await uploadBufferToCloudinary(file.buffer, 'avatar');
     await this.usersService.updateAvatar(user.id, avatarUrl);
     return { avatarUrl };
   }
