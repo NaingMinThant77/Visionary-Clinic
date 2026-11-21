@@ -14,7 +14,13 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
 
-  app.enableCors({ origin: 'http://localhost:5173' });
+  const allowedOrigins = (
+    process.env.CORS_ORIGIN ?? 'http://localhost:5173'
+  )
+    .split(',')
+    .map((origin) => origin.trim());
+
+  app.enableCors({ origin: allowedOrigins });
 
   app.useGlobalPipes(
     new ValidationPipe({
