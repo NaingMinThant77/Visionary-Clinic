@@ -9,6 +9,11 @@ financial (profit & loss) report.
 A NestJS + Prisma/PostgreSQL API (`backend/`) paired with a React + TypeScript
 frontend (`frontend/`).
 
+## Live deployment
+
+- **Frontend:** https://visionary-clinic.vercel.app/
+- **Backend API:** https://visionary-clinic-backend.onrender.com/api
+
 ## Roles
 
 The app has three roles, each with its own nav and routes, enforced both by
